@@ -1,0 +1,97 @@
+#include<intset.h>
+
+intset::intset(int x)
+{
+    num=x;
+    for(int i=0;i<num;i++)
+    {
+        element[i]=0;
+    }
+}
+
+intset::intset(const intset& x)
+{
+    num=x.num;
+    for(int i=0;i<x.num;i++)
+    {
+        element[i]=x.element[i];
+    }
+}
+
+void intset::operator=(const intset& x)
+{
+    num=x.num;
+    for(int i=0;i<x.num;i++)
+    {
+        element[i]=x.element[i];
+    }
+}
+
+void intset::insert(int x)
+    int pos=-1;
+    if (x<element[0]) pos=0;
+    else
+    if (x>element[num-1]) pos=num;
+    else
+    for(int i=0;i<num-1;i++)
+    {
+        if (x>element[i] && x<element[i+1]){
+            pos=i;
+            break;
+        }
+    }
+    if (pos!=-1)
+    {
+        if (pos==num){num++;element[num-1]=x;return;}
+        num++;
+        for(int i=num-1;i>=pos+1;i--)
+        {
+            element[i]=element[i-1];
+        }
+        element[pos]=x;
+    }
+    return;
+}
+
+void erase(int x)
+{
+    int pos=-1;
+    for(int i=0;i<num;i++){
+        if (x==element[i]) {pos=x;break;}
+    }
+    if(pos!=-1)
+    {
+        for(int i=pos;i<num-1;i++){element[i]=element[i+1];}
+        num--;
+    }
+}
+
+intset intset::setunion(const intset& x ) const
+{
+    intset result{*this};
+    for(int i=0;i<x.num;i++){
+        result.insert(x.element[i]);
+    }
+    return result;
+}
+
+intset intset::setintsection(const intset& x) const
+{
+    intset result{*this};
+    int cursor1=0,cursor2=0;
+    while(cursor1<x.num && cursor2<num)
+    {
+        if (x.element[cursor1]==element[cursor2]){
+                result.insert(element[cursor2]);
+                cursor1++;
+                cursor2++;
+        }
+        if (x.element[cursor1]>element[cursor2]){
+            cursor2++;
+        }
+        if (x.element[cursor1]<element[cursor2]){
+            cursor1++;
+        }
+    }
+    return
+}
